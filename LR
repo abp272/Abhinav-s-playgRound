@@ -222,7 +222,13 @@ The straight-line equation we get for the above values is,
 Sales = 6.948 + 0.054 * TV
 If we observe, the equation we got here is the same as the one we got in the statsmodel.
 
+We have to make sure to follow these five steps to build the simple linear regression model:
 
+Reading and understanding the data
+Visualizing the data
+Performing simple linear regression
+Residual analysis
+Predictions on the test set
 
 
 
