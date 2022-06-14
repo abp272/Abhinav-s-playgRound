@@ -1,0 +1,175 @@
+To build a linear regression model in python, we’ll follow five steps:
+
+Reading and understanding the data
+Visualizing the data
+Performing simple linear regression
+Residual analysis
+Predictions on the test set
+
+Import libraries
+
+# Importing naumpy and pandas libraries to read the data
+
+# Supress Warnings
+import warnings
+warnings.filterwarnings('ignore')
+
+# Import the numpy and pandas package
+import numpy as np
+import pandas as pd
+
+# Read the given CSV file, and view some sample records
+advertising = pd.read_csv("Company_data.csv")
+
+
+The dataset looks like this. Here our target variable is the Sales column.
+advertising
+
+Understand the data
+
+# Shape of our dataset
+advertising.shape
+
+# Info our dataset
+advertising.info()
+
+# Describe our dataset
+advertising.describe()
+
+Visualizing the data
+
+# Import matplotlib and seaborn libraries to visualize the data
+import matplotlib.pyplot as plt 
+import seaborn as sns
+
+# Using pairplot we'll visualize the data for correlation
+sns.pairplot(advertising, x_vars=['TV', 'Radio','Newspaper'], 
+             y_vars='Sales', size=4, aspect=1, kind='scatter')
+plt.show()
+
+If we cannot determine the correlation using a scatter plot, we can use the seaborn heatmap to visualize the data.
+
+# Visualizing the data using heatmap
+sns.heatmap(advertising.corr(), cmap="YlGnBu", annot = True)
+plt.show()
+
+Performing Simple Linear Regression
+Equation of simple linear regression
+y = c + mX
+
+In our case:
+y = c + m * TV
+The m values are known as model coefficients or model parameters.
+
+We’ll perform simple linear regression in four steps.
+
+Create X and y
+Create Train and Test set
+Train your model
+Evaluate the model
+
+Create X and y
+
+# Creating X and y
+X = advertising['TV']
+y = advertising['Sales']
+
+Create Train and Test sets
+
+# Splitting the varaibles as training and testing
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = 0.7, 
+                                                    test_size = 0.3, random_state = 100)
+                                                    
+                                                    
+Let’s take a look at the training dataset,
+# Take a look at the train dataset
+X_train
+y_train
+
+Building and training the model
+statsmodel
+sklearn
+
+
+By default, the statsmodel library fits a line that passes through the origin. But if we observe the simple linear regression equation y = c + mX, it has an intercept value as c. So, to have an intercept, we need to add the add_constant attribute manually.
+
+# Importing Statsmodels.api library from Stamodel package
+import statsmodels.api as sm
+
+# Adding a constant to get an intercept
+X_train_sm = sm.add_constant(X_train)
+
+Once we’ve added constant, we can fit the regression line using OLS (Ordinary Least Square) method present in the statsmodel. After that, we’ll see the parameters, i.e., c and m of the straight line.
+
+# Fitting the resgression line using 'OLS'
+lr = sm.OLS(y_train, X_train_sm).fit()
+
+# Printing the parameters
+lr.params
+
+# Performing a summary to list out all the different parameters of the regression line fitted
+lr.summary()
+
+1. The coefficient for TV is 0.054, and its corresponding p-value is very low, almost 0. That means the coefficient is statistically significant.
+
+We have to make sure that the p-value should always be less for the coefficient to be significant
+
+2. R-squared value is 0.816, which means that 81.6% of the Sales variance can be explained by the TV column using this line.
+
+3. Prob F-statistic has a very low p-value, practically zero, which gives us that the model fit is statistically significant.
+
+Since the fit is significant, let’s go ahead and visualize how well the straight-line fits the scatter plot between TV and Sales columns.
+
+From the parameters, we got the values of the intercept and the slope for the straight line. The equation of the line is,
+
+Sales = 6.948 + 0.054 * TV
+
+
+# Visualizing the regression line
+plt.scatter(X_train, y_train)
+plt.plot(X_train, 6.948 + 0.054*X_train, 'r')
+plt.show()
+
+Residual Analysis
+One of the major assumptions of the linear regression model is the error terms are normally distributed.
+
+Error = Actual y value - y predicted value
+
+# Predicting y_value using traingn data of X
+y_train_pred = lr.predict(X_train_sm)
+
+# Creating residuals from the y_train data and predicted y_data
+res = (y_train - y_train_pred)
+
+# Plotting the histogram using the residual values
+fig = plt.figure()
+sns.distplot(res, bins = 15)
+plt.title('Error Terms', fontsize = 15)
+plt.xlabel('y_train - y_train_pred', fontsize = 15)
+plt.show()
+
+# Looking for any patterns in the residuals
+plt.scatter(X_train,res)
+plt.show()
+
+
+Predictions on the Test data or Evaluating the model
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
