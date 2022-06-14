@@ -156,14 +156,71 @@ plt.show()
 
 Predictions on the Test data or Evaluating the model
 
+# Adding a constant to X_test
+X_test_sm = sm.add_constant(X_test)
+
+# Predicting the y values corresponding to X_test_sm
+y_test_pred = lr.predict(X_test_sm)
+
+# Printing the first 15 predicted values
+y_test_pred
 
 
+The R² value by using the above code = 0.792
+
+If we can remember from the training data, the R² value = 0.815
+
+Since the R² value on test data is within 5% of the R² value on training data, we can conclude that the model is pretty stable. Which means, what the model has learned on the training set can generalize on the unseen test set.
+
+Let’s visualize the line on the test data.
+
+# Visualize the line on the test set
+plt.scatter(X_test, y_test)
+plt.plot(X_test, y_test_pred, 'r')
+plt.show()
+
+Apart from the statsmodel, we can build a linear regression model using sklearn. Using the linear_model library from sklearn, we can make the model.
+
+Similar to statsmodel, we’ll split the data into train and test.
+
+# Splitting the data into train and test
+from sklearn.model_selection import train_test_split
+X_train_lm, X_test_lm, y_train_lm, y_test_lm = train_test_split(X, y, train_size = 0.7, 
+                                                                test_size = 0.3, random_state = 100)
 
 
+# Shape of the train set without adding column
+X_train_lm.shape
+
+# Adding additional column to the train and test data
+X_train_lm = X_train_lm.values.reshape(-1,1)
+X_test_lm = X_test_lm.values.reshape(-1,1)
+
+print(X_train_lm.shape)
+print(X_test_lm.shape)
+
+from sklearn.linear_model import LinearRegression
+
+# Creating an object of Linear Regression
+lm = LinearRegression()
+
+# Fit the model using .fit() method
+lm.fit(X_train_lm, y_train_lm)
 
 
+# Intercept value
+print("Intercept :",lm.intercept_)
+
+# Slope value
+print('Slope :',lm.coef_)
+
+The value of intercept and slope is,
 
 
+Coefficient Values
+The straight-line equation we get for the above values is,
+Sales = 6.948 + 0.054 * TV
+If we observe, the equation we got here is the same as the one we got in the statsmodel.
 
 
 
